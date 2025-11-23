@@ -1,0 +1,28 @@
+name: Build DLL
+
+on:
+  push:
+    branches: [ kr ]
+  pull_request:
+    branches: [ kr ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build solution (Release)
+      run: msbuild StellaSora-Tool.sln /p:Configuration=Release
+
+    - name: Upload built DLLs
+      uses: actions/upload-artifact@v4
+      with:
+        name: built-dlls
+        path: |
+          **/*.dll
